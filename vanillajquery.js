@@ -1,10 +1,10 @@
 !(function(){
-  var FrontendJS = function(selector, context) {
-    if (!(this instanceof FrontendJS)) {
+  var VanillaJQuery = function(selector, context) {
+    if (!(this instanceof VanillaJQuery)) {
       if (context) {
-        return FrontendJS(context).find(selector);
+        return VanillaJQuery(context).find(selector);
       } else {
-        return new FrontendJS(selector);
+        return new VanillaJQuery(selector);
       }
     }
 
@@ -12,14 +12,14 @@
 
     // If first argument is a selector
     if (typeof selector === 'string') {
-      FrontendJS.forEach(document.querySelectorAll(selector), function(element) {
+      VanillaJQuery.forEach(document.querySelectorAll(selector), function(element) {
         _instance.push(element);
       });
     }
     // else first argument are element(s)
     else {
-      if (selector instanceof NodeList || FrontendJS.isFrontend(selector) || Array.isArray(selector)) {
-        FrontendJS.forEach(selector, function(element) {
+      if (selector instanceof NodeList || VanillaJQuery.isVanillaJQuery(selector) || Array.isArray(selector)) {
+        VanillaJQuery.forEach(selector, function(element) {
           _instance.push(element);
         });
       } else if (selector instanceof Node) {
@@ -31,27 +31,27 @@
     this.length = this._instance.length;
   };
 
-  FrontendJS.prototype.toString = function() {
-    return '[object FrontendJS]';
+  VanillaJQuery.prototype.toString = function() {
+    return '[object VanillaJQuery]';
   };
 
-  FrontendJS.prototype.valueOf = function() {
+  VanillaJQuery.prototype.valueOf = function() {
     return this._instance;
   };
 
-  FrontendJS.prototype.find = function(selector) {
+  VanillaJQuery.prototype.find = function(selector) {
     var elements = [];
 
     this._instance.forEach(function(element) {
-      FrontendJS.forEach(element.querySelectorAll(selector), function(element) {
+      VanillaJQuery.forEach(element.querySelectorAll(selector), function(element) {
         elements.push(element);
       });
     });
 
-    return FrontendJS(elements);
+    return VanillaJQuery(elements);
   };
 
-  FrontendJS.prototype.on = function() {
+  VanillaJQuery.prototype.on = function() {
     var eventName, selectorDelegate, handler;
 
     eventName = arguments[0];
@@ -66,11 +66,11 @@
           var delegate;
 
           //var $delegates = $(event.target.parentElement).find(selectorDelegate);
-          var fe_delegates = FrontendJS(event.target.parentElement).find(selectorDelegate);
-          if (fe_delegates.length) {
-            var i, total = fe_delegates.length;
+          var v$delegates = VanillaJQuery(event.target.parentElement).find(selectorDelegate);
+          if (v$delegates.length) {
+            var i, total = v$delegates.length;
             for (i = total - 1; i >= 0; --i) {
-              if (event.target == fe_delegates[i]) {
+              if (event.target == v$delegates[i]) {
                 delegate = event.target;
                 break;
               }
@@ -94,27 +94,27 @@
     return this;
   };
 
-  FrontendJS.prototype.off = function(eventName, handler) {
-    FrontendJS.forEach(this._instance, function(index, element) {
+  VanillaJQuery.prototype.off = function(eventName, handler) {
+    VanillaJQuery.forEach(this._instance, function(index, element) {
       element.removeEventListener(eventName, handler);
     });
 
     return this;
   };
 
-  FrontendJS.__version = '0.1';
-  FrontendJS.__frontend = 'FrontendJS v' + FrontendJS.__version;
+  VanillaJQuery.__version = '0.1';
+  VanillaJQuery.__vanillajquery = 'VanillaJQuery v' + VanillaJQuery.__version;
 
-  FrontendJS.isFrontend = function(instance) {
-    return instance.hasOwnProperty('__frontend');
+  VanillaJQuery.isVanillaJQuery = function(instance) {
+    return instance.hasOwnProperty('__vanillajquery');
   };
 
-  FrontendJS.forEach = function(list, callback) {
+  VanillaJQuery.forEach = function(list, callback) {
     Array.prototype.forEach.call(list, callback);
   };
 
   // Polyfill
-  FrontendJS.matchesSelector = (function() {
+  VanillaJQuery.matchesSelector = (function() {
     var matches =
       Element.prototype.matchesSelector ||
       Element.prototype.mozMatchesSelector ||
@@ -147,5 +147,5 @@
       })();
   })();
 
-  window.fe = window.FrontendJS = FrontendJS;
+  window.v$ = window.VanillaJQuery = VanillaJQuery;
 })();
